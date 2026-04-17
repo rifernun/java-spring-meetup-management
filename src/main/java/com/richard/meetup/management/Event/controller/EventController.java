@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/v1/events", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/v1/event", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 public class EventController {
 
@@ -29,8 +29,8 @@ public class EventController {
                 .body(new ResponseDto("201", "Event created successfully"));
     }
 
-    @GetMapping(path = "/{eventId}")
-    public ResponseEntity<EventResponseDto> getEventById(@PathVariable("eventId") UUID eventId) {
+    @GetMapping(path = "/fetch")
+    public ResponseEntity<EventResponseDto> fetchEventDetails(@RequestParam UUID eventId) {
         EventResponseDto dto = iEventService.getEventById(eventId);
         return ResponseEntity
                 .status(HttpStatus.OK)
