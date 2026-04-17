@@ -38,7 +38,7 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public void deleteEvent() {
+    public void deleteEvent(UUID id) {
 
     }
 

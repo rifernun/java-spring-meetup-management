@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface IEventService {
     void createEvent(EventRequestDto eventRequestDto);
-    void deleteEvent();
+    void deleteEvent(UUID id);
     void updateEvent(EventResponseDto eventResponseDto);
     EventResponseDto getEventById(UUID id);
     List<EventResponseDto> getAllEvents();
