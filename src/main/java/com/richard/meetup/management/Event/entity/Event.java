@@ -1,5 +1,6 @@
 package com.richard.meetup.management.Event.entity;
 
+import com.richard.meetup.management.shared.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "tb_events")
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,7 +30,7 @@ public class Event {
     private String description;
 
     @Column(nullable = false)
-    private Instant dateTime;
+    private LocalDateTime dateTime;
 
     @Column(nullable = false)
     private String location;
@@ -36,9 +38,4 @@ public class Event {
     @Column(name = "max_capacity", nullable = false)
     private Long maxCapacity;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @Column(name = "created_by")
-    private String createdBy;
 }

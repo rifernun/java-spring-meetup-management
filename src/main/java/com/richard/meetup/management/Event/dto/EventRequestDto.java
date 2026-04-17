@@ -5,12 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 
 public record EventRequestDto(
         @NotBlank String title,
         @NotBlank String description,
-        @NotNull @Future Instant dateTime,
+        @NotNull @Future LocalDateTime dateTime,
         @NotBlank String location,
         @Positive Long maxCapacity
 ) {}

@@ -1,5 +1,6 @@
 package com.richard.meetup.management.Participant.entity;
 
+import com.richard.meetup.management.shared.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "tb_participants")
-public class Participant {
+public class Participant extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

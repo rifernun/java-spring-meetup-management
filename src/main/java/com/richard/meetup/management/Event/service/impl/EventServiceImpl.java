@@ -1,11 +1,13 @@
 package com.richard.meetup.management.Event.service.impl;
 
+import com.richard.meetup.management.Enrollment.repository.EnrollmentRepository;
 import com.richard.meetup.management.Event.dto.EventRequestDto;
 import com.richard.meetup.management.Event.dto.EventResponseDto;
 import com.richard.meetup.management.Event.entity.Event;
 import com.richard.meetup.management.Event.mapper.EventMapper;
 import com.richard.meetup.management.Event.repository.EventRepository;
 import com.richard.meetup.management.Event.service.IEventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,7 +18,11 @@ import java.util.UUID;
 @Service
 public class EventServiceImpl implements IEventService {
 
+    @Autowired
     private EventRepository repository;
+    
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
 
     @Override
     public void createEvent(EventRequestDto eventRequestDto) {
@@ -45,7 +51,7 @@ public class EventServiceImpl implements IEventService {
     public EventResponseDto getEventById(UUID id) {
         EventResponseDto dto = repository.findById(id)
                 .map(event -> {
-                    Long remainingSpots = event.getMaxCapacity(); // You should subtract the number of attendees from maxCapacity
+                    Long remainingSpots = event.getMaxCapacity();
                     return EventMapper.toResponseDto(event, remainingSpots);
                 })
                 .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
@@ -55,9 +61,15 @@ public class EventServiceImpl implements IEventService {
     @Override
     public List<EventResponseDto> getAllEvents() {
         List<EventResponseDto> list = repository.findAll().stream().map(event -> {
-            Long remainingSpots = event.getMaxCapacity();
+            Long remainingSpots = remainingSpots(event);
             return EventMapper.toResponseDto(event, remainingSpots);
         }).toList();
         return list;
+    }
+
+    // TODO - verify later if the logic is correct
+    private Long remainingSpots(Event event) {
+        Optional<Long> countedEvents = enrollmentRepository.countByEventId(event.getId());
+        return event.getMaxCapacity() - countedEvents.orElse(0L);
     }
 }
