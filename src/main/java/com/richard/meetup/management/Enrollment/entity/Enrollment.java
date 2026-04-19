@@ -1,5 +1,6 @@
 package com.richard.meetup.management.Enrollment.entity;
 
+import com.richard.meetup.management.Enrollment.entity.enums.EnrollmentStatus;
 import com.richard.meetup.management.Event.entity.Event;
 import com.richard.meetup.management.Participant.entity.Participant;
 import com.richard.meetup.management.shared.entity.BaseEntity;
@@ -34,4 +35,8 @@ public class Enrollment extends BaseEntity {
 
     @Column(nullable = false)
     private Instant dateTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EnrollmentStatus status = EnrollmentStatus.ACTIVE;
 }

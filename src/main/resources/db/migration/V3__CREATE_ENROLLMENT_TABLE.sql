@@ -6,6 +6,7 @@ CREATE TABLE tb_enrollments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(255) NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL,
     FOREIGN KEY (event_id) REFERENCES tb_events(id) ON DELETE CASCADE,
     FOREIGN KEY (participant_id) REFERENCES tb_participants(id) ON DELETE CASCADE
 );
