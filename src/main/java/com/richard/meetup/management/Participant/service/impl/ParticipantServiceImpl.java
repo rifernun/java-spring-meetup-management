@@ -3,6 +3,8 @@ package com.richard.meetup.management.Participant.service.impl;
 import com.richard.meetup.management.Participant.dto.ParticipantRequestDto;
 import com.richard.meetup.management.Participant.dto.ParticipantResponseDto;
 import com.richard.meetup.management.Participant.entity.Participant;
+import com.richard.meetup.management.Participant.exception.ParticipantAlreadyExists;
+import com.richard.meetup.management.Participant.exception.ParticipantNotFound;
 import com.richard.meetup.management.Participant.mapper.ParticipantMapper;
 import com.richard.meetup.management.Participant.repository.ParticipantRepository;
 import com.richard.meetup.management.Participant.service.IParticipantService;
@@ -20,33 +22,49 @@ public class ParticipantServiceImpl implements IParticipantService {
     @Autowired
     private ParticipantRepository repository;
 
+    private final ParticipantMapper participantMapper;
+
+    public ParticipantServiceImpl(ParticipantMapper participantMapper) {
+        this.participantMapper = participantMapper;
+    }
+
     @Override
     public void createParticipant(ParticipantRequestDto participantRequestDto) {
-        Participant participant = ParticipantMapper.toEntity(participantRequestDto);
+        Participant participant = participantMapper.toEntity(participantRequestDto);
         Optional<Participant> optionalParticipant = repository.findByEmail(participant.getEmail());
         if(optionalParticipant.isPresent()){
-            throw new RuntimeException("Participant with the same email already exists");
+            throw new ParticipantAlreadyExists("Participant with the same email already exists");
         } else {
             participant.setCreatedAt(Instant.now());
-            participant.setCreatedBy("system"); // In a real application, this should be the authenticated user
+            participant.setCreatedBy("system"); // change this to actual user in a real application
             repository.save(participant);
         }
     }
 
     @Override
     public void deleteParticipant(UUID id) {
-
+        if(repository.findById(id).isEmpty()){
+            throw new ParticipantNotFound("Participant not found with id: " + id);
+        }
+        repository.deleteById(id);
     }
 
     @Override
-    public void updateParticipant(ParticipantResponseDto participantResponseDto) {
-
+    public void updateParticipant(ParticipantRequestDto participantRequestDto, UUID id) {
+        if(repository.findById(id).isEmpty()){
+            throw new ParticipantNotFound("Participant not found with id: " + id);
+        }
+        Participant participant = repository.getReferenceById(id);
+        participant.setName(participantRequestDto.name());
+        participant.setEmail(participantRequestDto.email());
+        participant.setLinkedin(participantRequestDto.linkedin());
+        repository.save(participant);
     }
 
     @Override
     public ParticipantResponseDto getParticipantById(UUID id) {
         ParticipantResponseDto dto = repository.findById(id)
-                .map(ParticipantMapper::toResponseDto)
+                .map(participantMapper::toResponseDto)
                 .orElseThrow(() -> new RuntimeException("Participant not found with id: " + id));
         return dto;
     }
@@ -55,7 +73,7 @@ public class ParticipantServiceImpl implements IParticipantService {
     public List<ParticipantResponseDto> getAllParticipants() {
         List<ParticipantResponseDto> participants = repository.findAll()
                 .stream()
-                .map(ParticipantMapper::toResponseDto)
+                .map(participantMapper::toResponseDto)
                 .toList();
 
         return participants;

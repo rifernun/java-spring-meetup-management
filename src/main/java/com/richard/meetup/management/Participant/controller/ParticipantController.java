@@ -4,6 +4,7 @@ import com.richard.meetup.management.Participant.dto.ParticipantRequestDto;
 import com.richard.meetup.management.Participant.dto.ParticipantResponseDto;
 import com.richard.meetup.management.Participant.service.IParticipantService;
 import com.richard.meetup.management.shared.dto.ResponseDto;
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,22 @@ public class ParticipantController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(dto);
+    }
+
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<ResponseDto> deleteParticipant(@RequestParam UUID id) {
+        iParticipantService.deleteParticipant(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Participant deleted successfully"));
+    }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<ResponseDto> updateParticipant(@RequestBody ParticipantRequestDto dto, @RequestParam UUID id) {
+        iParticipantService.updateParticipant(dto, id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Participant updated successfully"));
     }
 
     @GetMapping

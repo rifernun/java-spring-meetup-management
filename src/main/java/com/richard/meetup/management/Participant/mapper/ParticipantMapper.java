@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ParticipantMapper {
 
-    public static Participant toEntity(ParticipantRequestDto dto) {
+    public Participant toEntity(ParticipantRequestDto dto) {
         if (dto == null) return null;
         
         Participant participant = new Participant();
@@ -18,7 +18,7 @@ public class ParticipantMapper {
         return participant;
     }
 
-    public static ParticipantResponseDto toResponseDto(Participant participant) {
+    public ParticipantResponseDto toResponseDto(Participant participant) {
         if (participant == null) return null;
 
         return new ParticipantResponseDto(
