@@ -37,6 +37,22 @@ public class EventController {
                 .body(dto);
     }
 
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<ResponseDto> deleteEvent(@RequestParam UUID eventId) {
+        iEventService.deleteEvent(eventId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Event deleted successfully"));
+    }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<ResponseDto> updateEvent(@RequestBody EventRequestDto dto, @RequestParam UUID eventId) {
+        iEventService.updateEvent(dto, eventId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Event updated successfully"));
+    }
+
     @GetMapping
     public ResponseEntity<List<EventResponseDto>> getAllEvents() {
         List<EventResponseDto> list = iEventService.getAllEvents();

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventMapper {
 
-    public static Event toEntity(EventRequestDto dto) {
+    public Event toEntity(EventRequestDto dto) {
         if (dto == null) return null;
 
         Event event = new Event();
@@ -20,7 +20,7 @@ public class EventMapper {
         return event;
     }
 
-    public static EventResponseDto toResponseDto(Event event, Long remainingSpots) {
+    public EventResponseDto toResponseDto(Event event, Long remainingSpots) {
         if (event == null) return null;
 
         return new EventResponseDto(

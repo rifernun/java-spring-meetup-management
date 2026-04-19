@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface IEventService {
     void createEvent(EventRequestDto eventRequestDto);
     void deleteEvent(UUID id);
-    void updateEvent(EventResponseDto eventResponseDto);
+    void updateEvent(EventRequestDto eventRequestDto, UUID id);
     EventResponseDto getEventById(UUID id);
     List<EventResponseDto> getAllEvents();
 }
