@@ -1,8 +1,86 @@
 package com.richard.meetup.management.shared.exception;
 
+import com.richard.meetup.management.Enrollment.exception.EnrollmentAlreadyExists;
+import com.richard.meetup.management.Enrollment.exception.EnrollmentNotFound;
+import com.richard.meetup.management.Event.exception.EventAlreadyExists;
+import com.richard.meetup.management.Event.exception.EventNotFound;
+import com.richard.meetup.management.Participant.exception.ParticipantAlreadyExists;
+import com.richard.meetup.management.Participant.exception.ParticipantNotFound;
+import com.richard.meetup.management.shared.dto.ErrorResponseDto;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+
+import java.time.Instant;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
+    @ExceptionHandler(ParticipantAlreadyExists.class)
+    public ResponseEntity<ErrorResponseDto> handleParticipantAlreadyExistsException(ParticipantAlreadyExists ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(ParticipantNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleParticipantNotFoundException(ParticipantNotFound ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EventAlreadyExists.class)
+    public ResponseEntity<ErrorResponseDto> handleEventAlreadyExistsException(EventAlreadyExists ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EventNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleEventNotFoundException(EventNotFound ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EnrollmentAlreadyExists.class)
+    public ResponseEntity<ErrorResponseDto> handleEnrollmentAlreadyExistsException(EnrollmentAlreadyExists ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EnrollmentNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleEnrollmentNotFoundException(EnrollmentNotFound ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
 }
