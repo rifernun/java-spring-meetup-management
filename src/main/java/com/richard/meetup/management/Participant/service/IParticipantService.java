@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface IParticipantService {
     void createParticipant(ParticipantRequestDto participantRequestDto);
     void deleteParticipant(UUID id);
-    void updateParticipant(ParticipantResponseDto participantResponseDto);
+    void updateParticipant(ParticipantRequestDto participantRequestDto, UUID id);
     ParticipantResponseDto getParticipantById(UUID id);
     List<ParticipantResponseDto> getAllParticipants();
 }
