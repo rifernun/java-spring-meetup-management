@@ -28,6 +28,14 @@ public class EnrollmentController {
                 .body(new ResponseDto("201", "Enrollment created successfully"));
     }
 
+    @PatchMapping(path = "/cancel")
+    public ResponseEntity<ResponseDto> cancelEnrollment(@RequestParam UUID id) {
+        iEnrollmentService.cancelEnrollment(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Enrollment cancelled successfully"));
+    }
+
     @GetMapping(path = "/fetch")
     public ResponseEntity<EnrollmentResponseDto> fetchEnrollmentDetails(@RequestParam UUID id) {
         EnrollmentResponseDto responseDto = iEnrollmentService.getEnrollmentById(id);
