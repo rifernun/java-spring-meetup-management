@@ -1,13 +1,12 @@
 package com.richard.meetup.management.shared.exception;
 
-import com.richard.meetup.management.Enrollment.exception.EnrollmentAlreadyExists;
-import com.richard.meetup.management.Enrollment.exception.EnrollmentNotFound;
-import com.richard.meetup.management.Event.exception.EventAlreadyExists;
-import com.richard.meetup.management.Event.exception.EventNotFound;
-import com.richard.meetup.management.Participant.exception.ParticipantAlreadyExists;
-import com.richard.meetup.management.Participant.exception.ParticipantNotFound;
+import com.richard.meetup.management.enrollment.exception.EnrollmentAlreadyExists;
+import com.richard.meetup.management.enrollment.exception.EnrollmentNotFound;
+import com.richard.meetup.management.event.exception.EventAlreadyExists;
+import com.richard.meetup.management.event.exception.EventNotFound;
+import com.richard.meetup.management.participant.exception.ParticipantAlreadyExists;
+import com.richard.meetup.management.participant.exception.ParticipantNotFound;
 import com.richard.meetup.management.shared.dto.ErrorResponseDto;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
