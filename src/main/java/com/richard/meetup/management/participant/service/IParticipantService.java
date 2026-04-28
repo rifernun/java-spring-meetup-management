@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IParticipantService {
-    void createParticipant(ParticipantRequestDto participantRequestDto);
     void deleteParticipant(UUID id);
     void updateParticipant(ParticipantRequestDto participantRequestDto, UUID id);
     ParticipantResponseDto getParticipantById(UUID id);
+    ParticipantResponseDto getParticipantByEmail(String email);
     List<ParticipantResponseDto> getAllParticipants();
+
 }
