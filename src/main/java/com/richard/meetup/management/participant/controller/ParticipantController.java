@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,14 +20,6 @@ import java.util.UUID;
 public class ParticipantController {
 
     private IParticipantService iParticipantService;
-
-    @PostMapping(path = "/create")
-    public ResponseEntity<ResponseDto> createParticipant(@RequestBody ParticipantRequestDto dto) {
-         iParticipantService.createParticipant(dto);
-         return ResponseEntity
-                 .status(HttpStatus.CREATED)
-                 .body(new ResponseDto("201", "Participant created successfully"));
-    }
 
     @GetMapping(path = "/fetch")
     public ResponseEntity<ParticipantResponseDto> fetchParticipantDetails(@RequestParam UUID id) {
@@ -50,6 +43,23 @@ public class ParticipantController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto("200", "Participant updated successfully"));
+    }
+
+    @PutMapping("/update/me")
+    public ResponseEntity<ResponseDto> updateMe(@RequestBody ParticipantRequestDto dto) {
+        iParticipantService.updateParticipant(dto, null);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Participant updated successfully"));
+    }
+
+    @GetMapping("/fetch/me")
+    public ResponseEntity<ParticipantResponseDto> fetchMyDetails() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        ParticipantResponseDto dto = iParticipantService.getParticipantByEmail(email);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(dto);
     }
 
     @GetMapping
