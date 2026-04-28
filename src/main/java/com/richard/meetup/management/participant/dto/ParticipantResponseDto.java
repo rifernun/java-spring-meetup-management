@@ -5,7 +5,7 @@ import java.util.UUID;
 public record ParticipantResponseDto(
         UUID id,
         String name,
-        String email,
-        String linkedin
+        String linkedin,
+        UUID userId
 ) {
 }
