@@ -19,7 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.Instant;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends RuntimeException {
+public class GlobalExceptionHandler {
     @ExceptionHandler(ParticipantAlreadyExists.class)
     public ResponseEntity<ErrorResponseDto> handleParticipantAlreadyExistsException(ParticipantAlreadyExists ex, WebRequest webRequest) {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
@@ -109,7 +109,7 @@ public class GlobalExceptionHandler extends RuntimeException {
     }
 
     @ExceptionHandler(UserIsAlreadyAnAdminException.class)
-    public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserIsAlreadyAnAdminException ex, WebRequest webRequest) {
+    public ResponseEntity<ErrorResponseDto> handleUserIsAlreadyAnAdminException(UserIsAlreadyAnAdminException ex, WebRequest webRequest) {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 webRequest.getDescription(false),
                 HttpStatus.CONFLICT,
