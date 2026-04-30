@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret:my-secret-key-that-should-be-very-long-and-secure-123456}")
+    @Value("${api.security.token.secret}")
     private String secret;
 
     public String generateToken(User user) {
