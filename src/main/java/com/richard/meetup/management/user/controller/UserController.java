@@ -20,7 +20,7 @@ public class UserController {
 
     private IUserService iUserService;
 
-    @PatchMapping("/update/role")
+    @PatchMapping("/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDto> updateUserRole(@PathVariable UUID id) {
         iUserService.updateUserRole(id);

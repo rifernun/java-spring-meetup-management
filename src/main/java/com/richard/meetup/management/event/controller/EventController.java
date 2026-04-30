@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/v1/event", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/v1/events", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 public class EventController {
 
     private IEventService iEventService;
 
-    @PostMapping(path = "/create")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDto> createEvent(@RequestBody EventRequestDto dto) {
         iEventService.createEvent(dto);
         return ResponseEntity
@@ -29,24 +30,27 @@ public class EventController {
                 .body(new ResponseDto("201", "Event created successfully"));
     }
 
-    @GetMapping(path = "/fetch")
-    public ResponseEntity<EventResponseDto> fetchEventDetails(@RequestParam UUID eventId) {
+    @GetMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<EventResponseDto> fetchEventDetails(@PathVariable UUID eventId) {
         EventResponseDto dto = iEventService.getEventById(eventId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(dto);
     }
 
-    @DeleteMapping(path = "/delete")
-    public ResponseEntity<ResponseDto> deleteEvent(@RequestParam UUID eventId) {
+    @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDto> deleteEvent(@PathVariable UUID eventId) {
         iEventService.deleteEvent(eventId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto("200", "Event deleted successfully"));
     }
 
-    @PutMapping(path = "/update")
-    public ResponseEntity<ResponseDto> updateEvent(@RequestBody EventRequestDto dto, @RequestParam UUID eventId) {
+    @PutMapping(path = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDto> updateEvent(@RequestBody EventRequestDto dto, @PathVariable UUID eventId) {
         iEventService.updateEvent(dto, eventId);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -54,6 +58,7 @@ public class EventController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<EventResponseDto>> getAllEvents() {
         List<EventResponseDto> list = iEventService.getAllEvents();
         return ResponseEntity

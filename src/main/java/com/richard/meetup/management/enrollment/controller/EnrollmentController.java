@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/v1/enrollment", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/v1/enrollments", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 public class EnrollmentController {
 
     private IEnrollmentService iEnrollmentService;
 
-    @PostMapping(path = "/create")
+    @PostMapping
     public ResponseEntity<ResponseDto> createEnrollment(@RequestBody EnrollmentRequestDto dto) {
         iEnrollmentService.createEnrollment(dto);
         return ResponseEntity
@@ -30,19 +30,19 @@ public class EnrollmentController {
                 .body(new ResponseDto("201", "Enrollment created successfully"));
     }
 
-    @PatchMapping(path = "/cancel")
-    public ResponseEntity<ResponseDto> cancelEnrollment(@RequestParam UUID id) {
+    @PatchMapping(path = "/{id}/cancel")
+    public ResponseEntity<ResponseDto> cancelEnrollment(@PathVariable UUID id) {
         iEnrollmentService.cancelEnrollment(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto("200", "Enrollment cancelled successfully"));
     }
 
-    @GetMapping(path = "/fetch")
-    public ResponseEntity<EnrollmentResponseDto> fetchEnrollmentDetails(@RequestParam UUID id) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<EnrollmentResponseDto> fetchEnrollmentDetails(@PathVariable UUID id) {
         EnrollmentResponseDto responseDto = iEnrollmentService.getEnrollmentById(id);
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .body(responseDto);
     }
 

@@ -15,37 +15,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/v1/participant", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/v1/participants", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 public class ParticipantController {
 
     private IParticipantService iParticipantService;
 
-    @GetMapping(path = "/fetch")
-    public ResponseEntity<ParticipantResponseDto> fetchParticipantDetails(@RequestParam UUID id) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ParticipantResponseDto> fetchParticipantDetails(@PathVariable UUID id) {
         ParticipantResponseDto dto = iParticipantService.getParticipantById(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(dto);
     }
 
-    @DeleteMapping(path = "/delete")
-    public ResponseEntity<ResponseDto> deleteParticipant(@RequestParam UUID id) {
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<ResponseDto> deleteParticipant(@PathVariable UUID id) {
         iParticipantService.deleteParticipant(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto("200", "Participant deleted successfully"));
     }
 
-    @PutMapping(path = "/update")
-    public ResponseEntity<ResponseDto> updateParticipant(@RequestBody ParticipantRequestDto dto, @RequestParam UUID id) {
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ResponseDto> updateParticipant(@RequestBody ParticipantRequestDto dto, @PathVariable UUID id) {
         iParticipantService.updateParticipant(dto, id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto("200", "Participant updated successfully"));
     }
 
-    @PutMapping("/update/me")
+    @PutMapping("/me")
     public ResponseEntity<ResponseDto> updateMe(@RequestBody ParticipantRequestDto dto) {
         iParticipantService.updateParticipant(dto, null);
         return ResponseEntity
@@ -53,7 +53,7 @@ public class ParticipantController {
                 .body(new ResponseDto("200", "Participant updated successfully"));
     }
 
-    @GetMapping("/fetch/me")
+    @GetMapping("/me")
     public ResponseEntity<ParticipantResponseDto> fetchMyDetails() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         ParticipantResponseDto dto = iParticipantService.getParticipantByEmail(email);
