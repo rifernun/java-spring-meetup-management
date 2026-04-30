@@ -11,6 +11,7 @@ import com.richard.meetup.management.event.repository.EventRepository;
 import com.richard.meetup.management.event.service.IEventService;
 import com.richard.meetup.management.shared.utils.CountRemainingSpots;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -21,16 +22,12 @@ import java.util.UUID;
 @Service
 public class EventServiceImpl implements IEventService {
 
-    @Autowired
-    private EventRepository repository;
-    
-    @Autowired
-    private EnrollmentRepository enrollmentRepository;
-
+    private final EventRepository repository;
     private final EventMapper eventMapper;
     private final CountRemainingSpots spots;
 
-    public EventServiceImpl(EventMapper eventMapper, CountRemainingSpots spots){
+    public EventServiceImpl(EventRepository repository, EventMapper eventMapper, CountRemainingSpots spots){
+        this.repository = repository;
         this.eventMapper = eventMapper;
         this.spots = spots;
     }
@@ -43,7 +40,8 @@ public class EventServiceImpl implements IEventService {
             throw new EventAlreadyExists("Event with the same title already exists");
         } else {
             event.setCreatedAt(Instant.now());
-            event.setCreatedBy("system"); // In a real application, this should be the authenticated user
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            event.setCreatedBy(email);
             repository.save(event);
         }
     }
@@ -75,7 +73,7 @@ public class EventServiceImpl implements IEventService {
     public EventResponseDto getEventById(UUID id) {
         EventResponseDto dto = repository.findById(id)
                 .map(event -> {
-                    Long remainingSpots = event.getMaxCapacity();
+                    Long remainingSpots = spots.calculate(event);
                     return eventMapper.toResponseDto(event, remainingSpots);
                 })
                 .orElseThrow(() -> new EventNotFound("Event not found with id: " + id));

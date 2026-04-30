@@ -21,14 +21,12 @@ import java.util.UUID;
 @Service
 public class ParticipantServiceImpl implements IParticipantService {
 
-    @Autowired
-    private ParticipantRepository repository;
-
+    private final ParticipantRepository repository;
     private final ParticipantMapper participantMapper;
-
     private final UserRepository userRepository;
 
-    public ParticipantServiceImpl(ParticipantMapper participantMapper, UserRepository userRepository) {
+    public ParticipantServiceImpl(ParticipantRepository repository, ParticipantMapper participantMapper, UserRepository userRepository) {
+        this.repository = repository;
         this.participantMapper = participantMapper;
         this.userRepository = userRepository;
     }

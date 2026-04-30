@@ -3,6 +3,7 @@ package com.richard.meetup.management.user.service.impl;
 import com.richard.meetup.management.auth.dto.RegisterRequestDTO;
 import com.richard.meetup.management.participant.entity.Participant;
 import com.richard.meetup.management.participant.repository.ParticipantRepository;
+import com.richard.meetup.management.user.dto.UserResponseDto;
 import com.richard.meetup.management.user.entity.User;
 import com.richard.meetup.management.user.entity.enums.UserRole;
 import com.richard.meetup.management.user.exception.UserAlreadyExistsException;
@@ -21,7 +22,6 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, ParticipantRepository participantRepository, PasswordEncoder passwordEncoder) {
@@ -45,7 +45,7 @@ public class UserServiceImpl implements IUserService {
         newUser.setPassword(encryptedPassword);
         newUser.setRole(UserRole.USER);
         newUser.setCreatedAt(Instant.now());
-        newUser.setCreatedBy("system");
+        newUser.setCreatedBy(data.email());
 
         User savedUser = this.userRepository.save(newUser);
 
@@ -54,19 +54,9 @@ public class UserServiceImpl implements IUserService {
         newParticipant.setLinkedin(data.linkedin());
         newParticipant.setUser(savedUser);
         newParticipant.setCreatedAt(Instant.now());
-        newParticipant.setCreatedBy("system");
+        newParticipant.setCreatedBy(data.email());
 
         this.participantRepository.save(newParticipant);
-    }
-
-    @Override
-    public void fetchUserByUsername(String username) {
-        //TODO
-    }
-
-    @Override
-    public void updateUser(UUID id) {
-        //TODO
     }
 
     @Override

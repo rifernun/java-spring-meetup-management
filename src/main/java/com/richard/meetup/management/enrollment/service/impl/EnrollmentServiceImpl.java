@@ -16,6 +16,7 @@ import com.richard.meetup.management.participant.entity.Participant;
 import com.richard.meetup.management.participant.exception.ParticipantNotFound;
 import com.richard.meetup.management.participant.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,14 +41,6 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 
     @Override
     public void createEnrollment(EnrollmentRequestDto enrollmentRequestDto) {
-        if (!participantRepository.existsById(enrollmentRequestDto.participantId())) {
-            throw new ParticipantNotFound("Participant not found with id: " + enrollmentRequestDto.participantId());
-        }
-
-        if (!eventRepository.existsById(enrollmentRequestDto.eventId())) {
-            throw new EventNotFound("Event not found with id: " + enrollmentRequestDto.eventId());
-        }
-
         Optional<Enrollment> responseEnrollment = enrollmentRepository.findByParticipantIdAndEventId(enrollmentRequestDto.participantId(), enrollmentRequestDto.eventId());
          if(responseEnrollment.isPresent()){
              if(responseEnrollment.get().getStatus() == EnrollmentStatus.ACTIVE){
@@ -62,7 +55,8 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
                 .orElseThrow(() -> new EventNotFound("Event not found with id: " + enrollmentRequestDto.eventId()));
 
         Enrollment enrollment = enrollmentMapper.toEntity(enrollmentRequestDto, participant, event);
-        enrollment.setCreatedBy("system");
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        enrollment.setCreatedBy(email);
         enrollmentRepository.save(enrollment);
     }
 
