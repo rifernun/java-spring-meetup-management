@@ -59,26 +59,38 @@ docker-compose up -d
 
 ## 🔌 API Documentation
 
-All endpoints produce `application/json`.
+The API documentation is automatically generated using **Swagger (OpenAPI 3)**.
 
-### Participants (`/api/v1/participant`)
-- `POST /create`: Register a new participant.
-- `GET /fetch?id={uuid}`: Get details of a participant.
-- `PUT /update?id={uuid}`: Update participant profile.
-- `DELETE /delete?id={uuid}`: Remove a participant.
+### Swagger UI
+You can access the interactive API documentation and test the endpoints directly from your browser:
+- **URL:** `http://localhost:8080/swagger-ui.html`
+
+### Authentication (`/api/v1/auth`)
+- `POST /login`: Authenticate a user and receive a JWT token.
+- `POST /register`: Register a new user account.
+
+### Users (Admin) (`/api/v1/admin/users`)
+- `PATCH /{id}/role`: Update a user's role to ADMIN.
+
+### Participants (`/api/v1/participants`)
+- `GET /{id}`: Get details of a participant.
+- `DELETE /{id}`: Remove a participant.
+- `PUT /{id}`: Update participant profile.
+- `PUT /me`: Update currently authenticated participant's profile.
+- `GET /me`: Get currently authenticated participant's details.
 - `GET /`: List all participants.
 
-### Events (`/api/v1/event`)
-- `POST /create`: Create a new meetup.
-- `GET /fetch?eventId={uuid}`: Get event details.
-- `PUT /update?eventId={uuid}`: Update event info.
-- `DELETE /delete?eventId={uuid}`: Cancel/Delete an event.
-- `GET /`: List all upcoming events.
+### Events (`/api/v1/events`)
+- `POST /`: Create a new meetup (Admin only).
+- `GET /{id}`: Get event details.
+- `DELETE /{id}`: Delete an event (Admin only).
+- `PUT /{id}`: Update event info (Admin only).
+- `GET /`: List all events.
 
-### Enrollments (`/api/v1/enrollment`)
-- `POST /create`: Enroll a participant in an event.
-- `PATCH /cancel?id={uuid}`: Cancel an existing enrollment.
-- `GET /fetch?id={uuid}`: Get enrollment details.
+### Enrollments (`/api/v1/enrollments`)
+- `POST /`: Enroll a participant in an event.
+- `PATCH /{id}/cancel`: Cancel an existing enrollment.
+- `GET /{id}`: Get enrollment details.
 - `GET /`: List all enrollments.
 
 ## Security & Quality
