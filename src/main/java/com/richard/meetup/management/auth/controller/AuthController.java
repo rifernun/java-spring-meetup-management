@@ -10,6 +10,9 @@ import com.richard.meetup.management.shared.dto.ResponseDto;
 import com.richard.meetup.management.user.entity.User;
 import com.richard.meetup.management.user.repository.UserRepository;
 import com.richard.meetup.management.user.service.IUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Authentication", description = "Endpoints for user authentication and registration")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -37,6 +41,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login into a user",
+            description = "Authenticate a user and return a JWT token for subsequent requests"
+    )
+    @ApiResponse(responseCode = "200", description = "Successful login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthRequestDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
@@ -48,6 +57,11 @@ public class AuthController {
 
     @PostMapping("/register")
     @Transactional
+    @Operation(
+            summary = "Register a user",
+            description = "Create a new user account with the provided registration details"
+    )
+    @ApiResponse(responseCode = "200", description = "Successful login")
     public ResponseEntity<ResponseDto> register(@RequestBody @Valid RegisterRequestDTO data) {
         userService.createUser(data);
         return ResponseEntity
